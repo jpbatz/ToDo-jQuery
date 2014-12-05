@@ -23,10 +23,12 @@ $(function() {
 
     if(this.checked) {
       console.log('item was selected');
-      $(this).parent().css('text-decoration','line-through');
+      $(this).parent().addClass('item-strike-out');
+      // $(this).parent().css('text-decoration','line-through');
     } else {
       console.log('item was not selected');
-      $(this).parent().css('text-decoration','none');
+      $(this).parent().removeClass('item-strike-out');
+      // $(this).parent().css('text-decoration','none');
     }
 
 });    

@@ -1,3 +1,7 @@
 body {
   background-color: papayaWhip;
 }
+
+.item-strike-out {
+  text-decoration: line-through;
+}
