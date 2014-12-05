@@ -17,7 +17,7 @@ $(function() {
   });
 
 
-  $('ul').on('change', '.item-checkbox', function() {
+  $('#list').on('change', '.item-checkbox', function() {
     // console.log(this);
     // console.log($(this));
 
