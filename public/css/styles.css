@@ -2,6 +2,10 @@ body {
   background-color: papayaWhip;
 }
 
+.list-item {
+  list-style-type: none;
+}
+
 .item-strike-out {
   text-decoration: line-through;
 }

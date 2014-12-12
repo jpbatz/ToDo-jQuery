@@ -1,0 +1,22 @@
+{
+  "name": "ToDo-jQuery",
+  "version": "1.0.0",
+  "description": "ToDo-jQuery ===========",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jpbatz/ToDo-jQuery.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jpbatz/ToDo-jQuery/issues"
+  },
+  "homepage": "https://github.com/jpbatz/ToDo-jQuery",
+  "dependencies": {
+    "express": "^4.10.5"
+  }
+}

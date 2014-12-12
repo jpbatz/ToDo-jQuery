@@ -8,12 +8,13 @@ $(function() {
 
     $('#new-todo').keydown(function(e) {
       // alert( "Handler for .keydown() called." );
-
       if(e.keyCode == 13) {
         // console.log("key pressed: " + e.keyCode);
         // console.log($(this).val());
-        $('#list').append('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + $(this).val() + '</li>')
+        $('#list').append('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + $(this).val() + '</li>');
+        $(this).val("");  // clear text field
       };
+
   });
 
 
@@ -31,6 +32,11 @@ $(function() {
       // $(this).parent().css('text-decoration','none');
     }
 
-});    
+  });
+
+  $('#save_button').click(function() {
+    console.log('save button pressed');
+    console.log($('.list-item').length);
+  })  
 
 });
