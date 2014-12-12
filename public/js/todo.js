@@ -37,6 +37,18 @@ $(function() {
   $('#save_button').click(function() {
     console.log('save button pressed');
     console.log($('.list-item').length);
-  })  
+
+    var list = [];
+    $('.list-item').each(function(i, obj) {
+      console.log(i + " " + $(obj));
+      list.push(
+          {
+            index: i,
+            title: $(obj).text(),
+            completed: $(obj).find("input:checked").length > 0
+          });
+      });
+    console.log(list);
+  });  
 
 });
