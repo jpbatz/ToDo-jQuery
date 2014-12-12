@@ -47,8 +47,16 @@ $(function() {
             title: $(obj).text(),
             completed: $(obj).find("input:checked").length > 0
           });
-      });
+    });
     console.log(list);
+
+    // POST array list to localhost:2020/save
+    var json = JSON.stringify(list);
+    console.log('json', json);
+
+    $.post('/save', {
+      todo_json_data: json
+    })
   });  
 
 });
