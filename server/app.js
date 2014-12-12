@@ -3,15 +3,10 @@ var app = express();
 
 app.use(express.static('public'));
 
-// app.get('/', function (req, res) {
-//   res.send('Hello World!')
-//   res.render('index.html')
-// })
-
 app.post('/save', function(req, res) {
 
   console.log('user sent post request');  // see in cli resp to browser save
-  res.sent("ok");
+  res.send("ok");
 
   // fs.writeFile("list.json");
   fs = require('fs');
