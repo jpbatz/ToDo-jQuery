@@ -8,31 +8,32 @@ $(function() {
       // populate your list
       if(list_items[i].completed == false) {
         console.log(list_items[i].title + " is incomplete");
-        $('#list').append('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + list_items[i].title + '</li>');
+        addTodoItem(list_items[i].title, false);
+        // $('#list').append('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + list_items[i].title + '</li>');
       } else {
         console.log(list_items[i].title + " is complete");
-        $('#list').append('<li class="list-item item-strike-out"><input type="checkbox" class="item-checkbox" value="" checked>' + list_items[i].title + '</li>');
+        addTodoItem(list_items[i].title, true)
+        // $('#list').append('<li class="list-item item-strike-out"><input type="checkbox" class="item-checkbox" value="" checked>' + list_items[i].title + '</li>');
       }
     }
   });
 
-    // clear list
-    $('#list li').remove();
+  // clear list
+  $('#list li').remove();
 
-    // create list items
-    $('#new-todo').keydown(function(e) {
-      if(e.keyCode == 13) {
-        $('#list').append('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + $(this).val() + '</li>');
-        $(this).val("");  // clear text field
-      };
-
+  // create list items
+  $('#new-todo').keydown(function(e) {
+    if(e.keyCode == 13) {
+      addTodoItem($(this).val(), false);
+      // $('#list').append('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + $(this).val() + '</li>');
+      $(this).val("");  // clear text field
+    };
   });
 
 
   $('#list').on('change', '.item-checkbox', function() {
     // console.log(this);
     // console.log($(this));
-
     if(this.checked) {
       console.log('item was selected');
       $(this).parent().addClass('item-strike-out');
@@ -40,18 +41,19 @@ $(function() {
       console.log('item was not selected');
       $(this).parent().removeClass('item-strike-out');
     }
-
   });
 
+  // remove completed items from the list
   $('#clear_button').click(function() {
     console.log('clear button pressed');
     $('.item-strike-out').remove();
   });
 
+  // save list to flat file on server
   $('#save_button').click(function() {
     console.log('save button pressed');
     console.log($('.list-item').length);
-
+    // make list into array object
     var list = [];
     $('.list-item').each(function(i, obj) {
       console.log(i + " " + $(obj));
@@ -64,13 +66,23 @@ $(function() {
     });
     console.log(list);
 
-    // POST array list to localhost:2020/save
+    // prepare list as JSON object to send
     var json = JSON.stringify(list);
     console.log('json', json);
-
+    // POST array list to server /save
     $.post('/save', {
       todo_json_data: json
     })
   });  
+
+  // adds new todo item or recreates from flat file
+  // completed or not completed items are considered
+  function addTodoItem(title, completed) {
+    if(completed == false ) {
+      $('#list').append('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + title + '</li>');
+    } else {
+      $('#list').append('<li class="list-item item-strike-out"><input type="checkbox" class="item-checkbox" value="" checked>' + title + '</li>');
+    }
+  }
 
 });
