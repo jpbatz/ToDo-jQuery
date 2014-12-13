@@ -6,8 +6,13 @@ $(function() {
     var list_items = jQuery.parseJSON(todo_data);
     for(var i=0; i<list_items.length; i++) {
       // populate your list
-      $('#list').append('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + list_items[i].title + '</li>');
-      
+      if(list_items[i].completed == false) {
+        console.log(list_items[i].title + " is incomplete");
+        $('#list').append('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + list_items[i].title + '</li>');
+      } else {
+        console.log(list_items[i].title + " is complete");
+        $('#list').append('<li class="list-item item-strike-out"><input type="checkbox" class="item-checkbox" value="" checked>' + list_items[i].title + '</li>');
+      }
     }
   });
 
@@ -36,6 +41,11 @@ $(function() {
       $(this).parent().removeClass('item-strike-out');
     }
 
+  });
+
+  $('#clear_button').click(function() {
+    console.log('clear button pressed');
+    $('.item-strike-out').remove();
   });
 
   $('#save_button').click(function() {
