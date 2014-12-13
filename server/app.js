@@ -10,12 +10,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // route
 app.post('/save', function(req, res) {
-  // console.log('user sent post request');
-  // console.log( req.body ); // prints body of bttp request
-  // // res.send("success");  // see in IE Network-Preview
-  // res.json({status:"success!!"}); // express will stringify
+  console.log('user sent post request');
+  console.log( req.body );        // prints body of bttp request
   saveToDoList(req.body.todo_json_data);
-  res.send("puppies!!")
+  // res.send("success");         // see in IE Network-Preview
+  res.json({status:"success!!"}); // express will stringify
 });
 
 var server = app.listen(3000, function () {
