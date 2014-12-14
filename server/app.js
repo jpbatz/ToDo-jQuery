@@ -1,10 +1,12 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var mongodb = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
-// var ObjectID = mongodb.MongoObjectID;
+var ObjectID = mongodb.MongoObjectID;
 var app = express();
 var CONNECTION_STRING = 'mongodb://localhost:27017/todosdb';
+
 // MongoDB connection test goes here
 
 // middleware
@@ -23,6 +25,8 @@ function connect_to_db(cb) {  // cb = callback function
     var collection = db.collection('todos');
 
     cb(db, collection);
+
+    // db.close();
 
   });
 }
