@@ -28,7 +28,7 @@ function connect_to_db(cb) {  // cb = callback function
 }
 
 // ***** routes *****
-app.post('/item', function(req, res) {
+app.post('/items', function(req, res) {
 
   console.log('user sent post request');
   console.log( req.body );                // prints body of http request
@@ -41,8 +41,8 @@ app.post('/item', function(req, res) {
       // Show the item that was just inserted; contains the _id field
       // Note that it is an array containing a single object
       console.log('err', err);
-      console.log('obj', obj);
-      res.send(obj);
+      console.log('obj', obj[0]._id);
+      res.send(obj[0]._id);
 
       // Close the db connection - required!
       db.close();
@@ -52,32 +52,29 @@ app.post('/item', function(req, res) {
 
 
 
-// app.get('/item', function(req, res) {
+app.get('/items', function(req, res) {
 
-//   console.log('user sent post request');
-//   console.log( req.body );                 // prints body of bttp request
+  connect_to_db(function(db, collection) {
 
-//   connect_to_db(function(db, collection) {
-//     var new_todo_item_to_be_inserted = req.body.new_item;
-
-//     // Insert a document into the collection
-//     collection.insert(new_todo_item_to_be_inserted, function(err, obj) {
+    collection.find({}).toArray(function(err, docs) {
 //       // Show the item that was just inserted; contains the _id field
 //       // Note that it is an array containing a single object
 //       console.log('err', err);
 //       console.log('obj', obj);
 //       res.send(obj);
-
-//       // Close the db connection
-//       db.close();
-//     });
-//   }); // End of function(err, docs) callback
-// });  // end app.get()
+      console.log("Found the following records");
+      console.dir(docs);
+      res.send(docs);
+      // Close the db connection
+      db.close();
+    });
+  }); // End of function(err, docs) callback
+});  // end app.get()
 
 
 // app.delete('/item', function(req, res) {
 
-//   console.log('user sent post request');
+//   console.log('user sent delete request');
 //   console.log( req.body );                 // prints body of bttp request
 
 //   connect_to_db(function(db, collection) {

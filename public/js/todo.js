@@ -2,11 +2,10 @@ $(function() {
 // $(document).ready(function() {  // when script.js is in .html head
 
   // autoload the save file
-  $.get('./todo_save.txt', function(todo_data) {
-    var list_items = jQuery.parseJSON(todo_data);
+  $.get('/items', function(list_items) {
     for(var i=0; i<list_items.length; i++) {
       // populate todo list
-      if(list_items[i].completed == false) {
+      if(list_items[i].completed == "false") {
         console.log(list_items[i].title + " is incomplete");
         addTodoItem(list_items[i].title, false);
       } else {
@@ -31,7 +30,8 @@ $(function() {
         }
       };
       // console.log("***** post_data is: " + post_data);
-      $.post('/item', post_data, function() {
+      $.post('/item', post_data, function(res_data) {
+        console.log(res_data);
         // if data is not error
         // visual stuff
       });
