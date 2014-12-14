@@ -2,8 +2,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var mongodb = require('mongodb');
-var MongoClient = require('mongodb').MongoClient;
-var ObjectID = mongodb.MongoObjectID;
+var MongoClient = mongodb.MongoClient;
+var ObjectID = mongodb.ObjectID;
 var app = express();
 var CONNECTION_STRING = 'mongodb://localhost:27017/todosdb';
 
@@ -23,10 +23,8 @@ function connect_to_db(cb) {  // cb = callback function
     }
     // Find the collection todos (or create it if it doesn't already exist)
     var collection = db.collection('todos');
-
-    cb(db, collection);
-
-    // db.close();
+    collection.db = db;
+    cb(collection);
 
   });
 }
@@ -37,7 +35,7 @@ app.post('/items', function(req, res) {
   console.log('user sent post request');
   console.log( req.body );                // prints body of http request
 
-  connect_to_db(function(db, collection) {
+  connect_to_db(function(collection) {
     var new_todo_item_to_be_inserted = req.body.new_item;
 
     // Insert a document into the collection
@@ -49,7 +47,7 @@ app.post('/items', function(req, res) {
       res.send(obj[0]._id);
 
       // Close the db connection - required!
-      db.close();
+      collection.db.close();
     });
   }); // End of function(err, docs) callback
 });  // end app.post()
@@ -58,47 +56,40 @@ app.post('/items', function(req, res) {
 
 app.get('/items', function(req, res) {
 
-  connect_to_db(function(db, collection) {
+  connect_to_db(function(collection) {
 
     collection.find({}).toArray(function(err, docs) {
-//       // Show the item that was just inserted; contains the _id field
-//       // Note that it is an array containing a single object
-//       console.log('err', err);
-//       console.log('obj', obj);
-//       res.send(obj);
+
       console.log("Found the following records");
       console.dir(docs);
       res.send(docs);
       // Close the db connection
-      db.close();
+      collection.db.close();
     });
   }); // End of function(err, docs) callback
 });  // end app.get()
 
 
-// app.delete('/item', function(req, res) {
 
-//   console.log('user sent delete request');
-//   console.log( req.body );                 // prints body of bttp request
+app.delete('/items/:item_id', function (req, res) {
 
-//   connect_to_db(function(db, collection) {
-//     var new_todo_item_to_be_inserted = req.body.new_item;
+  console.log('DELETING', req.params.item_id);
 
-//     // Insert a document into the collection
-//     collection.insert(new_todo_item_to_be_inserted, function(err, obj) {
-//       // Show the item that was just inserted; contains the _id field
-//       // Note that it is an array containing a single object
-//       console.log('err', err);
-//       console.log('obj', obj);
-//       res.send(obj);
+  connect_to_db( function ( collection ) {
 
-//       // Close the db connection
-//       db.close();
-//     });
-//   }); // End of function(err, docs) callback
-// });  // end app.delete()
+    var _id = req.params.item_id;
 
+    collection.remove({"_id": new ObjectID( _id )}, function (err, result) {
+      if( err ) throw err;
+      
+      res.json({ success : "success" });
 
+      collection.db.close();
+      // db.close();
+
+    });
+  });  // end of connect_to_db()
+});  // end app.delete()
 
 
 

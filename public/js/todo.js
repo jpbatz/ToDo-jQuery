@@ -7,10 +7,10 @@ $(function() {
       // populate todo list
       if(list_items[i].completed == "false") {
         console.log(list_items[i].title + " is incomplete");
-        addTodoItem(list_items[i].title, false);
+        addTodoItem(list_items[i]._id, list_items[i].title, false);
       } else {
         console.log(list_items[i].title + " is complete");
-        addTodoItem(list_items[i].title, true)
+        addTodoItem(list_items[i]._id, list_items[i].title, true)
       }
     }
   });
@@ -21,7 +21,7 @@ $(function() {
   // create list items
   $('#new-todo').keydown(function(e) {
     if(e.keyCode == 13) {
-      addTodoItem($(this).val(), false);
+      addTodoItem(null, $(this).val(), false);
       
       var post_data = {
         new_item: {
@@ -47,7 +47,7 @@ $(function() {
       console.log('item was selected');
       $(this).parent().addClass('item-strike-out');
     } else {
-      console.log('item was not selected');
+      console.log('item was un-selected');
       $(this).parent().removeClass('item-strike-out');
     }
   });
@@ -83,16 +83,44 @@ $(function() {
   //     todo_json_data: json
   //   })
   // });  
+// });
 
   // function addTodoItem():
   // adds new todo item or recreates from flat file
   // completed or not completed items are considered
-  function addTodoItem(title, completed) {
+  function addTodoItem(object_id, title, completed) {
+
+    var new_list_item = null;
+
     if(completed == false ) {
-      $('#list').append('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + title + '</li>');
+      new_list_item = $('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + title + '</li>');
     } else {
-      $('#list').append('<li class="list-item item-strike-out"><input type="checkbox" class="item-checkbox" value="" checked>' + title + '</li>');
+      new_list_item = $('<li class="list-item item-strike-out"><input type="checkbox" class="item-checkbox" value="" checked>' + title + '</li>');
     }
-  }
+
+    new_list_item.data("object-id", object_id);
+
+    var list_delete_button = $('<button>', {
+        text : "[delete]",
+        click : function (e) {
+          var button = $(e.currentTarget);
+          var object_id = button.closest("li").data("object-id");
+          console.log(object_id);
+          $.ajax( '/items/' + object_id ,
+            {
+              type : "DELETE",
+              success : function (data) {
+              console.log('data',data);
+              }
+            }
+          );
+        }
+      });
+
+    new_list_item.append( list_delete_button );
+
+    $('#list').append(new_list_item);
+
+  };
 
 });
