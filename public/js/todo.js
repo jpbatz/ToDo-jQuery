@@ -10,7 +10,7 @@ $(function() {
         addTodoItem(list_items[i]._id, list_items[i].title, false);
       } else {
         console.log(list_items[i].title + " is complete");
-        addTodoItem(list_items[i]._id, list_items[i].title, true)
+        addTodoItem(list_items[i]._id, list_items[i].title, true);
       }
     }
   });
@@ -30,13 +30,13 @@ $(function() {
         }
       };
       // console.log("***** post_data is: " + post_data);
-      $.post('/item', post_data, function(res_data) {
+      $.post('/items', post_data, function(res_data) {
         console.log(res_data);
         // if data is not error
         // visual stuff
       });
       $(this).val("");  // clear text field, should reset to placeholder
-    };
+    }
   });
 
 
@@ -58,32 +58,6 @@ $(function() {
     $('.item-strike-out').remove();
   });
 
-  // save list to flat file on server
-  // $('#save_button').click(function() {
-  //   console.log('save button pressed');
-  //   console.log($('.list-item').length);
-  //   // make list into array object
-  //   var list = [];
-  //   $('.list-item').each(function(i, obj) {
-  //     console.log(i + " " + $(obj));
-  //     list.push(
-  //         {
-  //           index: i,
-  //           title: $(obj).text(),  // just text, not html()
-  //           completed: $(obj).find("input:checked").length > 0
-  //         });
-  //   });
-  //   console.log(list);
-
-  //   // prepare list as JSON object to send
-  //   var json = JSON.stringify(list);
-  //   console.log('json', json);
-  //   // POST array list to server /save
-  //   $.post('/save', {
-  //     todo_json_data: json
-  //   })
-  // });  
-// });
 
   // function addTodoItem():
   // adds new todo item or recreates from flat file
@@ -92,7 +66,7 @@ $(function() {
 
     var new_list_item = null;
 
-    if(completed == false ) {
+    if(completed === false ) {
       new_list_item = $('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + title + '</li>');
     } else {
       new_list_item = $('<li class="list-item item-strike-out"><input type="checkbox" class="item-checkbox" value="" checked>' + title + '</li>');
@@ -121,6 +95,6 @@ $(function() {
 
     $('#list').append(new_list_item);
 
-  };
+  }
 
 });
