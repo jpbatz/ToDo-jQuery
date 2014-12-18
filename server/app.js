@@ -8,6 +8,8 @@ var mongodb = require('mongodb');
 var MongoClient = mongodb.MongoClient;
 var ObjectID = mongodb.ObjectID;  // ??? Why not "ObjectId" - with lowercase "d" ???
 
+// var mongoose = require('mongoose');
+
 var bodyParser = require('body-parser');
 
 // expressjs: listens for client requests on route /items and processes them
@@ -17,6 +19,7 @@ var app = express();
 // DRY and easy to make change as declared
 // ??? how do we know to use "docker:27017" ???
 var CONNECTION_STRING = 'mongodb://localhost:27017/todosdb';
+//var CONNECTION_STRING = 'mongodb://dbadmin:dbadmin@ds027741.mongolab.com:27741/tudosdb';
 
 // MongoDB connection test goes here
 
