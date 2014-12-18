@@ -41,7 +41,7 @@ $(function() {
 
       });
       $(this).val("");  // clear text field, should reset to placeholder
-    };
+    }
   });
 
 
@@ -91,7 +91,7 @@ $(function() {
     // should return item
     $('#todo-list').append(new_list_item);
 
-  };
+  }
 
 
   // cross out list item when box is checked, 
