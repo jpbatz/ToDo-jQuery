@@ -177,9 +177,9 @@ app.delete('/items/:id', function (req, res) {
 // assumes host address is self?
 var server = app.listen(3000, function () {
 
-  var host = server.address().address
-  var port = server.address().port
+  var host = server.address().address;
+  var port = server.address().port;
   // see command line where nodemon was initiated for stdout messages
-  console.log('Example app listening at http://%s:%s', host, port)
+  console.log('Example app listening at http://%s:%s', host, port);
 
 });

@@ -5,16 +5,9 @@ $(function() {
 
   // autoload the saved collection
   $.get('/items', function(docs) {
-    for(var i=0; i<docs.length; i++) {
-      // populate todo list
-      if(docs[i].completed == "false") {
-        console.log(docs[i]._id + " " + docs[i].title + " is incomplete");
-        addTodoItem(docs[i]._id, docs[i].title, false);
-      } else if(docs[i].completed == true) { // need to fix collection true => "true"
-        console.log(docs[i]._id + " " + docs[i].title + " is complete");
-        addTodoItem(docs[i]._id, docs[i].title, true)
-      }
-    }
+    docs.forEach(function(doc) {
+      $('#todo-list').append(buildTodoItem(doc));
+    });
   });
 
 
@@ -55,47 +48,100 @@ $(function() {
   // function addTodoItem():
   // adds new todo item or recreates from flat file
   // completed or not completed items are considered
-  function addTodoItem(object_id, title, completed) {
+  function buildTodoItem(todo_doc) {
 
-    var new_list_item = null;
+    var list_item = $('<li>', {
+      class: "list-items",
+      "data-object-id": todo_doc._id
+    });
 
-    if(completed == false ) {
-      // break out to smaller pieces
-      new_list_item = $('<li class="list-item"><input type="checkbox" class="item-checkbox" value="">' + title + '</li>');
-    } else {
-      new_list_item = $('<li class="list-item item-strike-out"><input type="checkbox" class="item-checkbox" value="" checked>' + title + '</li>');
+    var list_checkbox = $('<input>', {
+      type: "checkbox",
+      change: change_completed_status // make function, "completed?"
+    });
+
+    var list_label = $('<span>', {
+      text: todo_doc.title
+    });
+
+    var list_delete = $('<button>', {
+      text: "[DELETE]",
+      click: click_delete_item_handler // make function
+    });
+
+    if(todo_doc.completed === true) {
+      list_checkbox.attr("checked", "checked");  // "completed"?
     }
 
-    new_list_item.data("object-id", object_id);
 
-    var list_delete_button = $('<button>', {
-        text : "[delete]",
-        click : function (e) {
-          var button = $(e.currentTarget);
-          var object_id = button.closest("li").data("object-id");
-          console.log(object_id);
-          $.ajax( '/items/' + object_id ,
-            {
-              type : "DELETE",
-              success : function (data) {
-                button.closest("li").remove();
-                console.log('data',data);
-              }
-            }
-          );
-        }
-      });
+    list_item
+      .append(list_checkbox)
+      .append(list_label)
+      .append(list_delete);
 
-    new_list_item.append( list_delete_button );
+    console.log(list_item);
+    return list_item;
 
-    // should return item
-    $('#todo-list').append(new_list_item);
+
+    // list_item.data("object-id", object_id);
+
+    // var list_delete_button = $('<button>', {
+    //     text : "[delete]",
+    //     click : function (e) {
+    //       var button = $(e.currentTarget);  // ??? why not $(this) ???
+    //       var object_id = button.closest("li").data("object-id");
+    //       console.log("_id =  " + object_id);  // doesn't work here
+    //       $.ajax( '/items/' + object_id ,
+    //         {
+    //           type : "DELETE",
+    //           success : function (data) {
+    //             button.closest("li").remove();
+    //             console.log('data',data);
+    //             console.log("_id =  " + object_id);  // works here
+    //           }
+    //         }
+    //       );
+    //     }
+    //   });
+
+    // new_list_item.append( list_delete_button );
 
   }
 
 
-  // cross out list item when box is checked, 
+/* EVENT HANDLERS */
+
+function change_completed_status(event) {
+  var checkbox = $(event.currentTarget);
+  var object_id = checkbox.closest("li").data("object-id");
+  $.ajax('/items/' + object_id + '/' + checkbox.prop("checked"), 
+  {
+    type: "PUT",
+    success: function(data) {
+      console.log('data', data);
+    }
+  });
+}
+
+function click_delete_item_handler (event) {
+  var button = $(event.currentTarget);  // ??? why not $(this) ???
+  var object_id = button.closest("li").data("object-id");
+  console.log("_id =  " + object_id);  // doesn't work here
+  $.ajax( '/items/' + object_id ,
+    {
+      type : "DELETE",
+      success : function (data) {
+        button.closest("li").remove();
+        console.log('data',data);
+        console.log("_id =  " + object_id);  // works here
+      }
+    });
+}
+
+
+  // cross out list item when box is checked,
   // or uncross item if unchecked
+  // update database collection document
   $('#todo-list').on('change', '.item-checkbox', function() {
     // console.log(this);
     // console.log($(this));
