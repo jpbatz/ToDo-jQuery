@@ -13,26 +13,29 @@ $(function() {
 
   // create new list item when enter key is pressed
   $('#new-todo').keydown(function(event) {
-    if(event.keyCode == 13) {
+    if(event.which == 13) {
 
-      var user_input = $(this).val();
+      createNewTodo();
+    //   var user_input = $(this).val();
       
-      var post_data = {
-        new_item: {
-          title: user_input,
-          completed: false
-        }
-      };
-      // console.log("***** post_data is: " + post_data);
-      $.post('/items', post_data, function(new_todo_id) {
-        console.log(new_todo_id);
-        // if data is not error
+    //   var post_data = {
+    //     new_item: {           // need data-object-id
+    //       title: user_input,
+    //       "data-object-id": null,
+    //       completed: false
+    //     }
+    //   };
+    //   // console.log("***** post_data is: " + post_data);
+    //   $.post('/items', post_data, function(new_todo_id) {
+    //     console.log("new _id: " + new_todo_id);
+    //     // if data is not error
+    //     // need to pass id for li
+    //     post_data.new_item["data-object-id"] = new_todo_id;
+    //     // visual stuff
+    //     $('#todo-list').append( buildTodoItem( post_data.new_item ) );
 
-        // visual stuff
-        $('#todo-list').append( buildTodoItem( post_data.new_item ) );
-
-      });
-      $(this).val("");  // clear text field, should reset to placeholder
+    //   });
+    //   $(this).val("");  // clear text field, should reset to placeholder
     }
   });
 
@@ -86,29 +89,30 @@ $(function() {
 
     // list_item.data("object-id", object_id);
 
-    // var list_delete_button = $('<button>', {
-    //     text : "[delete]",
-    //     click : function (e) {
-    //       var button = $(e.currentTarget);  // ??? why not $(this) ???
-    //       var object_id = button.closest("li").data("object-id");
-    //       console.log("_id =  " + object_id);  // doesn't work here
-    //       $.ajax( '/items/' + object_id ,
-    //         {
-    //           type : "DELETE",
-    //           success : function (data) {
-    //             button.closest("li").remove();
-    //             console.log('data',data);
-    //             console.log("_id =  " + object_id);  // works here
-    //           }
-    //         }
-    //       );
-    //     }
-    //   });
-
-    // new_list_item.append( list_delete_button );
-
   }
 
+  function createNewTodo() {
+    
+    var user_input = $('#new-todo').val();
+    console.log("NEW TODO ITEM : "+ $('#new-todo').val());
+    // reset placeholder
+    $('#new-todo').val('');
+
+    var post_data = {
+      new_item : {
+        title : user_input,
+        checked : false
+      }
+    };
+
+    $.post('/items', post_data, function (new_todo_id){
+      
+      post_data.new_item._id = new_todo_id;
+      $('#todo_list').append( buildTodoItem( post_data.new_item ) );
+
+    });
+
+  }
 
 /* EVENT HANDLERS */
 
