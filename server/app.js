@@ -175,7 +175,7 @@ app.delete('/items/:id', function (req, res) {
 
 // expressjs: assign port 3000 to listen for requests from web page and todo.js
 // assumes host address is self?
-var server = app.listen(3000, function () {
+var server = app.listen(process.env.PORT, process.env.IP, function () {
 
   var host = server.address().address;
   var port = server.address().port;
