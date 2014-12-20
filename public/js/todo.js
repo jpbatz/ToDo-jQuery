@@ -27,10 +27,9 @@ $(function() {
       $.post('/items', post_data, function(new_todo_id) {
         console.log(new_todo_id);
         // if data is not error
-        addTodoItem(new_todo_id, user_input, false);
 
         // visual stuff
-        // $('ul#todo-list').append( buildTodoItem( post_data.new_item ) );
+        $('#todo-list').append( buildTodoItem( post_data.new_item ) );
 
       });
       $(this).val("");  // clear text field, should reset to placeholder
@@ -45,7 +44,7 @@ $(function() {
     $('.item-strike-out').remove();
   });
 
-  // function addTodoItem():
+  // function buildTodoItem():
   // adds new todo item or recreates from flat file
   // completed or not completed items are considered
   function buildTodoItem(todo_doc) {
@@ -56,8 +55,9 @@ $(function() {
     });
 
     var list_checkbox = $('<input>', {
+      class: "item-checkbox",
       type: "checkbox",
-      change: change_completed_status // make function, "completed?"
+      change: change_completed_status // what is change?  new property?
     });
 
     var list_label = $('<span>', {
@@ -69,8 +69,9 @@ $(function() {
       click: click_delete_item_handler // make function
     });
 
-    if(todo_doc.completed === true) {
-      list_checkbox.attr("checked", "checked");  // "completed"?
+    if(todo_doc.completed === "true") {
+      // list_checkbox.attr("checked", "checked");  // "completed"?
+      list_checkbox.prop("checked", true);  // "completed"?
     }
 
 
@@ -133,7 +134,7 @@ function click_delete_item_handler (event) {
       success : function (data) {
         button.closest("li").remove();
         console.log('data',data);
-        console.log("_id =  " + object_id);  // works here
+        console.log("Removed _id =  " + object_id);  // works here
       }
     });
 }
