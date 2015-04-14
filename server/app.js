@@ -16,10 +16,14 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
 
+var config = require('../config.json');
+var USERNAME = config.USERNAME;
+var PASSWORD = config.PASSWORD;
+
 // DRY and easy to make change as declared
 // ??? how do we know to use "docker:27017" ???
-var CONNECTION_STRING = 'mongodb://localhost:27017/todosdb';
-//var CONNECTION_STRING = 'mongodb://dbadmin:dbadmin@ds027741.mongolab.com:27741/tudosdb';
+// var CONNECTION_STRING = 'mongodb://localhost:27017/todosdb';
+var CONNECTION_STRING = 'mongodb://'+USERNAME+':'+PASSWORD+'@ds027741.mongolab.com:27741/tudosdb';
 
 // MongoDB connection test goes here
 
